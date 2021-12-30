@@ -28,18 +28,18 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          - macos-latest
-          - windows-latest
+          #- macos-latest
+          #- windows-latest
         python-version:
           # When changing this list, be sure to check the [gh-actions] list in
           # tox.ini so that tox will run properly.
-          - "3.6"
-          - "3.7"
-          - "3.8"
+          #- "3.6"
+          #- "3.7"
+          #- "3.8"
           - "3.9"
           - "3.10"
-          - "3.11.0-alpha.2"
-          - "pypy3"
+          #- "3.11.0-alpha.2"
+          #- "pypy3"
         exclude:
           # Windows PyPy doesn't seem to work?
           - os: windows-latest
@@ -74,7 +74,7 @@ jobs:
           COVERAGE_CONTEXT: "${{ matrix.python-version }}.${{ matrix.os }}"
         run: |
           set -xe
-          python -m tox
+          python -m tox -- -k q
 
       - name: "Upload coverage data"
         uses: actions/upload-artifact@v2
