@@ -8,6 +8,7 @@ on:
     branches:
       - master
       - nedbat/*
+      - "!**/*metacov*"
   pull_request:
   workflow_dispatch:
 
