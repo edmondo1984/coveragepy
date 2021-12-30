@@ -141,12 +141,13 @@ jobs:
 
     steps:
       - name: "Checkout reports repo"
-        # TODO: sparse checkout would be great
-        uses: actions/checkout@v2
-        with:
-          repository: nedbat/coverage-reports
-          path: ./reports_repo
-          token: ${{ secrets.COVERAGE_REPORTS_TOKEN }}
+        run: |
+          git version
+          git clone --depth=1 --no-checkout https://${{ secrets.COVERAGE_REPORTS_TOKEN }}@github.com/nedbat/coverage-reports reports_repo
+          cd reports_repo
+          git sparse-checkout init
+          git sparse-checkout set '/*' '!/reports'
+          git checkout main
 
       - name: "Download coverage JSON report"
         uses: actions/download-artifact@v2
@@ -192,6 +193,7 @@ jobs:
           echo "${{ env.sha10 }}: ${{ env.branch }}" >> commit.txt
           # Commit.
           cd ./reports_repo
+          git sparse-checkout set '/*' '${{ env.report_dir }}'
           rm ${{ env.report_dir }}/.gitignore
           git add ${{ env.report_dir }}
           git add latest.html
